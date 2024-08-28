@@ -54,3 +54,11 @@ export async function updateReply(replyId: string, data: UpdateReplyInterface) {
 
   return updatedReply;
 }
+
+export async function deleteReply(replyId: string) {
+  const deletedReply = await replyRepository.deleteReply(replyId);
+
+  if (!deletedReply) throw new ReplyNotFoundError("reply not found");
+
+  return deletedReply;
+}

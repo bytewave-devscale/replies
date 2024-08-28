@@ -33,3 +33,7 @@ export async function updateReply(replyId: string, data: UpdateReplyInterface) {
   return updatedReply;
 }
 
+export async function deleteReply(replyId: string) {
+  const deletedReply = await replyModel.findOneAndDelete({ _id: replyId });
+  return deletedReply;
+}

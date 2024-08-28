@@ -52,11 +52,28 @@ export async function handleUpdateReply(req: Request, res: Response) {
     return res.status(201).json({ updatedReply });
   } catch (error) {
     if (error instanceof ZodError) {
-      res.status(400).json({ error: error.message });
+      return res.status(400).json({ error: error.message });
     }
 
     if (error instanceof Error) {
-      res.status(500).json({ error: error.message });
+      return res.status(500).json({ error: error.message });
+    }
+  }
+}
+
+export async function handleDeleteReply(req: Request, res: Response) {
+  const replyId = req.params.replyId;
+
+  try {
+    const deletedReply = await replyService.deleteReply(replyId);
+    return res.status(201).json({ deletedReply });
+  } catch (error) {
+    if (error instanceof ReplyNotFoundError) {
+      return res.status(400).json({ error: error.message });
+    }
+
+    if (error instanceof Error) {
+      return res.status(500).json({ error: error.message });
     }
   }
 }
