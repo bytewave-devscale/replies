@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { ReplyInterface } from "../types/entity";
+import { ReplyInterface, UpdateReplyInterface } from "../types/entity";
 
 const replySchema = new Schema({
   replyAuthorId: String,
@@ -14,7 +14,22 @@ export async function getReplies() {
   return replies;
 }
 
+export async function getReply(replyId: string) {
+  const reply = await replyModel.find({ _id: replyId });
+  return reply;
+}
+
 export async function createReply(data: ReplyInterface) {
   const newReply = await new replyModel(data).save();
   return newReply;
 }
+
+export async function updateReply(replyId: string, data: UpdateReplyInterface) {
+  const updatedReply = await replyModel.findOneAndUpdate(
+    { _id: replyId },
+    data,
+    { new: true }
+  );
+  return updatedReply;
+}
+

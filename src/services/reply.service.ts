@@ -1,6 +1,7 @@
-import { ReplyInterface } from "../types/entity";
+import { ReplyInterface, UpdateReplyInterface } from "../types/entity";
 import * as replyRepository from "../repositories/reply.repository";
 import { z, ZodError } from "zod";
+import { ReplyNotFoundError } from "../types/custom.error";
 
 const replyDataSchema = z
   .object({
@@ -10,15 +11,23 @@ const replyDataSchema = z
   })
   .strict();
 
+const updateReplyDataSchema = z
+  .object({
+    content: z.string().min(1),
+  })
+  .strict();
+
 export async function getReplies() {
-  try {
-    const replies = await replyRepository.getReplies();
-    return replies;
-  } catch (error) {
-    if (error instanceof Error) {
-      throw new Error("get all replies failed");
-    }
-  }
+  const replies = await replyRepository.getReplies();
+  return replies;
+}
+
+export async function getReply(replyId: string) {
+  const reply = await replyRepository.getReply(replyId);
+
+  if (!reply) throw new ReplyNotFoundError("reply not found");
+
+  return reply;
 }
 
 export async function createReply(data: ReplyInterface) {
@@ -33,9 +42,15 @@ export async function createReply(data: ReplyInterface) {
     if (error instanceof ZodError) {
       throw new Error(error.issues[0].code);
     }
-
-    if (error instanceof Error) {
-      throw new Error("create reply failed");
-    }
   }
+}
+
+export async function updateReply(replyId: string, data: UpdateReplyInterface) {
+  updateReplyDataSchema.parse(data);
+
+  const updatedReply = await replyRepository.updateReply(replyId, data);
+
+  if (!updateReply) throw new ReplyNotFoundError("reply not found");
+
+  return updatedReply;
 }
