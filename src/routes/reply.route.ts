@@ -7,7 +7,7 @@ const replyRouter = Router();
 replyRouter.get("/", replyController.handleGetReplies);
 replyRouter.get("/:replyId", replyController.handleGetReply);
 replyRouter.post("/", authMiddleware, replyController.handleCreateReply);
-replyRouter.patch("/:replyId", replyController.handleUpdateReply);
-replyRouter.delete("/:replyId", replyController.handleDeleteReply);
+replyRouter.patch("/:replyId", authMiddleware, replyController.handleUpdateReply);
+replyRouter.delete("/:replyId", authMiddleware, replyController.handleDeleteReply);
 
 export default replyRouter;

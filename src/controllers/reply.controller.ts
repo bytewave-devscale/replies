@@ -50,9 +50,14 @@ export async function handleCreateReply(req: Request, res: Response) {
 
 export async function handleUpdateReply(req: Request, res: Response) {
   const replyId = req.params.replyId;
+  const replyAuthorId = req.body.authData.userId;
 
   try {
-    const updatedReply = await replyService.updateReply(replyId, req.body);
+    const updatedReply = await replyService.updateReply({
+      replyId,
+      replyAuthorId,
+      content: req.body.content,
+    });
     return res.status(201).json({ updatedReply });
   } catch (error) {
     if (error instanceof ZodError) {

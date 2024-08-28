@@ -31,7 +31,6 @@ export async function getReply(replyId: string) {
 }
 
 export async function createReply(data: ReplyInterface) {
-  
   try {
     replyDataSchema.parse(data);
     const newReply = await replyRepository.createReply(data);
@@ -46,12 +45,22 @@ export async function createReply(data: ReplyInterface) {
   }
 }
 
-export async function updateReply(replyId: string, data: UpdateReplyInterface) {
-  updateReplyDataSchema.parse(data);
+export async function updateReply(updateArgs: {
+  replyId: string;
+  replyAuthorId: string;
+  content: string;
+}) {
+  const { replyId, replyAuthorId, content } = updateArgs;
 
-  const updatedReply = await replyRepository.updateReply(replyId, data);
+  updateReplyDataSchema.parse({ content });
 
-  if (!updateReply) throw new ReplyNotFoundError("reply not found");
+  const updatedReply = await replyRepository.updateReply({
+    replyId,
+    replyAuthorId,
+    content,
+  });
+
+  if (!updatedReply) throw new ReplyNotFoundError("reply not found");
 
   return updatedReply;
 }

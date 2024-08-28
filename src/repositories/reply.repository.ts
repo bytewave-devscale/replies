@@ -24,10 +24,16 @@ export async function createReply(data: ReplyInterface) {
   return newReply;
 }
 
-export async function updateReply(replyId: string, data: UpdateReplyInterface) {
+export async function updateReply(updateArgs: {
+  replyId: string;
+  replyAuthorId: string;
+  content: string;
+}) {
+  const { replyId, replyAuthorId, content } = updateArgs;
+
   const updatedReply = await replyModel.findOneAndUpdate(
-    { _id: replyId },
-    data,
+    { _id: replyId, replyAuthorId },
+    { content },
     { new: true }
   );
   return updatedReply;
