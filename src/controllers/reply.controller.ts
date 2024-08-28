@@ -72,9 +72,13 @@ export async function handleUpdateReply(req: Request, res: Response) {
 
 export async function handleDeleteReply(req: Request, res: Response) {
   const replyId = req.params.replyId;
+  const replyAuthorId = req.body.authData.userId;
 
   try {
-    const deletedReply = await replyService.deleteReply(replyId);
+    const deletedReply = await replyService.deleteReply({
+      replyId,
+      replyAuthorId,
+    });
     return res.status(201).json({ deletedReply });
   } catch (error) {
     if (error instanceof ReplyNotFoundError) {

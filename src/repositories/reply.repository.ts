@@ -39,7 +39,14 @@ export async function updateReply(updateArgs: {
   return updatedReply;
 }
 
-export async function deleteReply(replyId: string) {
-  const deletedReply = await replyModel.findOneAndDelete({ _id: replyId });
+export async function deleteReply(deleteReplyArgs: {
+  replyId: string;
+  replyAuthorId: string;
+}) {
+  const { replyId, replyAuthorId } = deleteReplyArgs;
+  const deletedReply = await replyModel.findOneAndDelete({
+    _id: replyId,
+    replyAuthorId,
+  });
   return deletedReply;
 }

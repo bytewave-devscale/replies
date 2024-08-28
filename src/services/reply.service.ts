@@ -65,8 +65,15 @@ export async function updateReply(updateArgs: {
   return updatedReply;
 }
 
-export async function deleteReply(replyId: string) {
-  const deletedReply = await replyRepository.deleteReply(replyId);
+export async function deleteReply(deleteReplyArgs: {
+  replyId: string;
+  replyAuthorId: string;
+}) {
+  const { replyId, replyAuthorId } = deleteReplyArgs;
+  const deletedReply = await replyRepository.deleteReply({
+    replyId,
+    replyAuthorId,
+  });
 
   if (!deletedReply) throw new ReplyNotFoundError("reply not found");
 
