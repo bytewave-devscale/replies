@@ -32,11 +32,15 @@ export async function handleGetReply(req: Request, res: Response) {
 }
 
 export async function handleCreateReply(req: Request, res: Response) {
-  const data = req.body;
+  const newReplyData = {
+    replyAuthorId: req.body.authData.userId,
+    threadId: req.body.threadId,
+    content: req.body.content,
+  };
 
   try {
-    const newReply = await replyService.createReply(data);
-    return res.status(201).json({ newReply });
+    const newReply = await replyService.createReply(newReplyData);
+    return res.status(201).json({ newReply, authData: req.body.authData });
   } catch (error) {
     if (error instanceof Error) {
       return res.status(400).json({ error: error.message });
