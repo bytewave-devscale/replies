@@ -23,11 +23,10 @@ export async function getReplies() {
 }
 
 export async function getReply(replyId: string) {
-  const reply = await replyRepository.getReply(replyId);
+  const replies = await replyRepository.getFilteredReplies({ _id: replyId });
+  if (!replies) throw new ReplyNotFoundError("reply not found");
 
-  if (!reply) throw new ReplyNotFoundError("reply not found");
-
-  return reply;
+  return replies[0];
 }
 
 export async function createReply(data: ReplyInterface) {

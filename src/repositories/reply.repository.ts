@@ -14,9 +14,12 @@ export async function getReplies() {
   return replies;
 }
 
-export async function getReply(replyId: string) {
-  const reply = await replyModel.find({ _id: replyId });
-  return reply;
+export async function getFilteredReplies(filter: {
+  _id?: string;
+  replyAuthorId?: string;
+}) {
+  const replies = await replyModel.find(filter);
+  return replies;
 }
 
 export async function createReply(data: ReplyInterface) {

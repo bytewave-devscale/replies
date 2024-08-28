@@ -1,4 +1,5 @@
 export interface ReplyInterface {
+  _id?: string;
   replyAuthorId: string;
   threadId: string;
   content: string;
