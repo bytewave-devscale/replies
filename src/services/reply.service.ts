@@ -1,4 +1,4 @@
-import { ReplyInterface } from "./../types/entity";
+import { ReplyInterface } from "../types/entity";
 import * as replyRepository from "../repositories/reply.repository";
 import { z, ZodError } from "zod";
 
@@ -6,7 +6,7 @@ const replyDataSchema = z
   .object({
     replyAuthorId: z.string(),
     threadId: z.string(),
-    content: z.string(),
+    content: z.string().min(1),
   })
   .strict();
 
@@ -25,10 +25,13 @@ export async function createReply(data: ReplyInterface) {
   try {
     replyDataSchema.parse(data);
     const newReply = await replyRepository.createReply(data);
+
+    if (!newReply) throw new Error();
+
     return newReply;
   } catch (error) {
     if (error instanceof ZodError) {
-      throw new Error(error.issues[0].message);
+      throw new Error(error.issues[0].code);
     }
 
     if (error instanceof Error) {

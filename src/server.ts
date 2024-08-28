@@ -1,8 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import connectDb from "../utils/connectdb";
-import replyRouter from "../routes/reply.route";
+import connectDb from "./utils/connectdb";
+import replyRouter from "./routes/reply.route";
 
 dotenv.config();
 

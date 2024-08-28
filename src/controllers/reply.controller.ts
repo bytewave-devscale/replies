@@ -11,3 +11,16 @@ export async function handleGetReplies(_: Request, res: Response) {
     }
   }
 }
+
+export async function handleCreateReply(req: Request, res: Response) {
+  const data = req.body;
+
+  try {
+    const newReply = await replyService.createReply(data);
+    return res.status(201).json({ newReply });
+  } catch (error) {
+    if (error instanceof Error) {
+      return res.status(400).json({ error: error.message });
+    }
+  }
+}
