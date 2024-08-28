@@ -1,0 +1,4 @@
+@host=http://localhost:8040
+
+### get all replies
+GET {{host}}/api/v1/reply
