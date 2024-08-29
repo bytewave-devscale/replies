@@ -9,16 +9,12 @@ const replySchema = new Schema({
 
 const replyModel = model("Reply", replySchema);
 
-export async function getReplies() {
-  const replies = await replyModel.find();
-  return replies;
-}
-
-export async function getFilteredReplies(filter: {
+export async function getReplies(filter: {
   _id?: string;
   replyAuthorId?: string;
+  threadId?: string;
 }) {
-  const replies = await replyModel.find(filter);
+  const replies = await replyModel.find(filter).exec();
   return replies;
 }
 

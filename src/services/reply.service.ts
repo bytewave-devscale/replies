@@ -18,15 +18,29 @@ const updateReplyDataSchema = z
   .strict();
 
 export async function getReplies() {
-  const replies = await replyRepository.getReplies();
+  const replies = await replyRepository.getReplies({});
   return replies;
 }
 
 export async function getReply(replyId: string) {
-  const replies = await replyRepository.getFilteredReplies({ _id: replyId });
+  const replies = await replyRepository.getReplies({ _id: replyId });
   if (!replies) throw new ReplyNotFoundError("reply not found");
 
   return replies[0];
+}
+
+export async function getReplyByAuthor(replyAuthorId: string) {
+  const replies = await replyRepository.getReplies({ replyAuthorId });
+  if (replies.length === 0) throw new ReplyNotFoundError("reply not found");
+
+  return replies;
+}
+
+export async function getReplyByThread(threadId: string) {
+  const replies = await replyRepository.getReplies({ threadId });
+  if (replies.length === 0) throw new ReplyNotFoundError("reply not found");
+
+  return replies;
 }
 
 export async function createReply(data: ReplyInterface) {

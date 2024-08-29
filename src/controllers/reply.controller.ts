@@ -31,6 +31,40 @@ export async function handleGetReply(req: Request, res: Response) {
   }
 }
 
+export async function handleGetReplyByAuthor(req: Request, res: Response) {
+  const replyAuthorId = req.params.replyAuthorId;
+
+  try {
+    const reply = await replyService.getReplyByAuthor(replyAuthorId);
+    return res.status(200).json({ reply });
+  } catch (error) {
+    if (error instanceof ReplyNotFoundError) {
+      return res.status(404).json({ error: error.message });
+    }
+
+    if (error instanceof Error) {
+      return res.status(500).json({ error: error.message });
+    }
+  }
+}
+
+export async function handleGetReplyByThread(req: Request, res: Response) {
+  const threadId = req.params.threadId;
+
+  try {
+    const reply = await replyService.getReplyByThread(threadId);
+    return res.status(200).json({ reply });
+  } catch (error) {
+    if (error instanceof ReplyNotFoundError) {
+      return res.status(404).json({ error: error.message });
+    }
+
+    if (error instanceof Error) {
+      return res.status(500).json({ error: error.message });
+    }
+  }
+}
+
 export async function handleCreateReply(req: Request, res: Response) {
   const newReplyData = {
     replyAuthorId: req.body.authData.userId,
